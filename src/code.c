@@ -80,7 +80,11 @@ int   listLength  (Node *headPtr);
 
 static void _nullify(Node **nodePtrPtr)
 {
-    // TODO
+    if (nodePtrPtr == NULL) {
+        return;
+    }
+    *nodePtrPtr = NULL;
+
 }
 
 
@@ -98,7 +102,10 @@ static void _nullify(Node **nodePtrPtr)
 
 static Node* _findFirst(Node *headPtr)
 {
-    // TODO
+    
+    if (headPtr != NULL) {
+        return headPtr;
+    }
     return NULL;
 }
 
@@ -121,8 +128,14 @@ static Node* _findFirst(Node *headPtr)
 
 static Node* _findLast(Node *headPtr)
 {
-    // TODO
-    return NULL;
+    Node *currentPtr = headPtr;
+    if (currentPtr == NULL) {
+        return NULL;
+    }
+    while (currentPtr->nextPtr != NULL) {
+        currentPtr = currentPtr->nextPtr;
+    }
+    return currentPtr;
 }
 
 
@@ -144,8 +157,19 @@ static Node* _findLast(Node *headPtr)
 
 static Node* _findValue(Node *headPtr, int value)
 {
-    // TODO
-    return NULL;
+    if (headPtr == NULL) {
+        return NULL;
+    }
+    Node *currentPtr = headPtr;
+    while (currentPtr->value != value) {
+        currentPtr = currentPtr->nextPtr;
+    }
+    if (currentPtr == value){
+        return currentPtr;
+    }
+    else{
+        return NULL;
+    }
 }
 
 
@@ -173,7 +197,11 @@ static Node* _findValue(Node *headPtr, int value)
 
 void initNode(Node *nodePtr, int value)
 {
-    // TODO
+    if (nodePtr == NULL) {
+        return NULL;
+    }
+    nodePtr->value = value;
+    nodePtr->nextPtr = NULL;
 }
 
 
@@ -196,8 +224,11 @@ void initNode(Node *nodePtr, int value)
 
 Node* createNode(int value)
 {
-    // TODO
-    return NULL;
+    Node *newNodePtr = malloc(sizeof(Node));
+    if (newNodePtr == NULL) {
+        return NULL;
+    }
+    initNode(newNodePtr, value);
 }
 
 
@@ -218,7 +249,11 @@ Node* createNode(int value)
 
 void destroyNode(Node **nodePtrPtr)
 {
-    // TODO
+    if (nodePtrPtr == NULL || *nodePtrPtr == NULL) {
+        return;
+    }
+    free(nodePtrPtr);
+    _nullify(nodePtrPtr);
 }
 
 
@@ -244,8 +279,14 @@ void destroyNode(Node **nodePtrPtr)
 
 int addFirst(Node **headPtrPtr, Node *newNodePtr)
 {
-    // TODO
-    return -1;
+    if (headPtrPtr == NULL || newNodePtr == NULL) {
+        return -1;
+    }
+
+    newNodePtr->nextPtr = *headPtrPtr;
+    *headPtrPtr = newNodePtr;
+    
+    return 0;
 }
 
 
