@@ -1,5 +1,5 @@
-//char *AUTHOR_NAME        = (char *) "Your Name";
-//char *AUTHOR_AUTHORSHIP  = (char *) "I acknowledge that I have worked on this
+// char *AUTHOR_NAME        = (char *) "Nolan Wedlake";
+// char *AUTHOR_AUTHORSHIP  = (char *) "I acknowledge that I have worked on this
 // assignment independently, except where explicitly noted and referenced.
 // Any collaboration or use of external resources has been properly cited.
 // I am fully aware of the consequences of academic dishonesty and agree to
@@ -198,7 +198,7 @@ static Node* _findValue(Node *headPtr, int value)
 void initNode(Node *nodePtr, int value)
 {
     if (nodePtr == NULL) {
-        return NULL;
+        return;
     }
     nodePtr->value = value;
     nodePtr->nextPtr = NULL;
@@ -252,7 +252,7 @@ void destroyNode(Node **nodePtrPtr)
     if (nodePtrPtr == NULL || *nodePtrPtr == NULL) {
         return;
     }
-    free(nodePtrPtr);
+    free(*nodePtrPtr);
     _nullify(nodePtrPtr);
 }
 
@@ -311,8 +311,20 @@ int addFirst(Node **headPtrPtr, Node *newNodePtr)
 
 int addLast(Node **headPtrPtr, Node *newNodePtr)
 {
-    // TODO
-    return -1;
+    if (headPtrPtr == NULL || newNodePtr == NULL) {
+        return -1;
+    }
+
+    newNodePtr->nextPtr = NULL;
+
+    if (*headPtrPtr == NULL) {
+        *headPtrPtr = newNodePtr;
+        return 0;
+    }
+
+    Node *lastNodePtr = _findLast(*headPtrPtr);
+    lastNodePtr->nextPtr = newNodePtr;
+    return 0;
 }
 
 
@@ -336,8 +348,16 @@ int addLast(Node **headPtrPtr, Node *newNodePtr)
 
 Node* detachFirst(Node **headPtrPtr)
 {
-    // TODO
-    return NULL;
+    if (headPtrPtr == NULL || *headPtrPtr == NULL) {
+        return NULL;
+    }
+
+    Node *detachedNode = _findFirst(*headPtrPtr);
+    *headPtrPtr = detachedNode->nextPtr;
+    
+    _nullify(&(detachedNode->nextPtr));
+
+    return detachedNode;
 }
 
 
