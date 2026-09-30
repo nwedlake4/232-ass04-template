@@ -380,8 +380,23 @@ Node* detachFirst(Node **headPtrPtr)
 
 Node* detachLast(Node **headPtrPtr)
 {
-    // TODO
-    return NULL;
+    if (headPtrPtr == NULL || *headPtrPtr == NULL) {
+        return NULL;
+    }
+
+    if ((*headPtrPtr)->nextPtr == NULL) {
+        return detachFirst(headPtrPtr);
+    }
+
+    Node *currentPtr = *headPtrPtr;
+    while (currentPtr->nextPtr->nextPtr != NULL) {
+        currentPtr = currentPtr->nextPtr;
+    }
+
+    Node *detachedNode = currentPtr->nextPtr;
+    _nullify(&(currentPtr->nextPtr));
+
+    return detachedNode;
 }
 
 
@@ -405,8 +420,28 @@ Node* detachLast(Node **headPtrPtr)
 
 Node* detachValue(Node **headPtrPtr, int value)
 {
-    // TODO
-    return NULL;
+    if (headPtrPtr == NULL || *headPtrPtr == NULL) {
+        return NULL;
+    }
+
+    if ((*headPtrPtr)->value == value) {
+        return detachFirst(headPtrPtr);
+    }
+
+    Node *currentPtr = *headPtrPtr;
+    while (currentPtr->nextPtr != NULL && currentPtr->nextPtr->value != value) {
+        currentPtr = currentPtr->nextPtr;
+    }
+
+    if (currentPtr->nextPtr == NULL) {
+        return NULL;
+    }
+
+    Node *detachedNode = currentPtr->nextPtr;
+    currentPtr->nextPtr = detachedNode->nextPtr;
+    _nullify(&(detachedNode->nextPtr));
+
+    return detachedNode;
 }
 
 
@@ -428,8 +463,13 @@ Node* detachValue(Node **headPtrPtr, int value)
 
 int deleteFirst(Node **headPtrPtr)
 {
-    // TODO
-    return -1;
+    Node *deleteNode = detachFirst(headPtrPtr);
+
+    if (deleteNode == NULL) {
+        return -1;
+    }
+    destroyNode(&deleteNode);
+    return 0;
 }
 
 
@@ -451,8 +491,14 @@ int deleteFirst(Node **headPtrPtr)
 
 int deleteLast(Node **headPtrPtr)
 {
-    // TODO
-    return -1;
+    Node *deleteNode = detachLast(headPtrPtr);
+
+    if (deleteNode == NULL) {
+        return -1;
+    }
+
+    destroyNode(&deleteNode);
+    return 0;
 }
 
 
@@ -474,8 +520,14 @@ int deleteLast(Node **headPtrPtr)
 
 int deleteValue(Node **headPtrPtr, int value)
 {
-    // TODO
-    return -1;
+    Node *deleteNode = detachValue(headPtrPtr, value);
+
+    if (deleteNode == NULL) {
+        return -1;
+    }
+
+    destroyNode(&deleteNode);
+    return 0;
 }
 
 
@@ -497,7 +549,14 @@ int deleteValue(Node **headPtrPtr, int value)
 
 void destroyList(Node **headPtrPtr)
 {
-    // TODO
+    // Guard against NULL headPtrPtr
+    if (headPtrPtr == NULL) {
+        return;
+    }
+
+    while (deleteFirst(headPtrPtr) == 0) {
+        // Loop until deleteFirst returns -1
+    }
 }
 
 
@@ -512,8 +571,15 @@ void destroyList(Node **headPtrPtr)
 
 int printList(Node *headPtr)
 {
-    // TODO
-    return -1;
+    if (headPtr == NULL) {
+        return -1;
+    }
+
+    Node *currentPtr = headPtr;
+    while (currentPtr != NULL) {
+        currentPtr = currentPtr->nextPtr;
+    }
+    return 0;
 }
 
 
@@ -526,6 +592,13 @@ int printList(Node *headPtr)
 
 int listLength(Node *headPtr)
 {
-    // TODO
-    return 0;
+    int count = 0;
+    Node *currentPtr = headPtr;
+
+    while (currentPtr != NULL) {
+        count++;
+        currentPtr = currentPtr->nextPtr;
+    }
+
+    return count;
 }
